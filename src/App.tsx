@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useDragControls } from 'motion/react';
 import confetti from 'canvas-confetti';
-import { Heart, Volume2, VolumeX, X, Shuffle, Sparkles, Search } from 'lucide-react';
-import { CARDS, CardData, Category } from './constants';
+import { Heart, X, Shuffle, Sparkles, Search, Calendar, Plus } from 'lucide-react';
+import { CARDS, CardData, Category, MEMORIES, Memory } from './constants';
 
 // --- Types ---
 type ModalState = {
   isOpen: boolean;
   card: CardData | null;
+};
+
+type MemoryModalState = {
+  isOpen: boolean;
+  memory: Memory | null;
 };
 
 // --- Components ---
@@ -233,7 +238,98 @@ const SearchBar = ({ searchQuery, onSearch }: { searchQuery: string; onSearch: (
   );
 };
 
-const Modal = ({ isOpen, card, onClose }: { isOpen: boolean; card: CardData | null; onClose: () => void }) => {
+const BoredMode = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+  const [resultMessage, setResultMessage] = useState("");
+
+  const questions = [
+    {
+      question: "What do you think I love more about you?",
+      options: ["Your heart", "Your personality", "Your physical appearance"],
+      correctMessage: "Wrong! I love EVERYTHING about you! 💖"
+    },
+    {
+      question: "Who is the boss in this relationship?",
+      options: ["Me (Makram)", "You (Walae)"],
+      correctMessage: (answer: string) => answer.includes("Makram") ? "Nice joke 😂 but we both know it's you." : "Correct! 👑 You rule my world."
+    },
+    {
+      question: "If I could only eat one thing for the rest of my life, what would it be?",
+      options: ["Pizza", "Burgers", "You"],
+      correctMessage: (answer: string) => answer === "You" ? "You. Obviously. 😋" : "Nope. It's definitely YOU. 😋"
+    },
+    {
+      question: "How much do I love you?",
+      options: ["A lot", "To the moon", "Infinity"],
+      correctMessage: "Trick question. It's way more than all of these combined. ♾️❤️"
+    },
+    {
+      question: "What is my favorite view?",
+      options: ["The sunset", "The ocean", "Your face"],
+      correctMessage: (answer: string) => answer === "Your face" ? "Your face. Always. 😍" : "Nope. It's your face. Always. 😍"
+    }
+  ];
+
+  const handleAnswer = (option: string) => {
+    const q = questions[currentQuestion];
+    let msg = "";
+    if (typeof q.correctMessage === 'function') {
+      msg = q.correctMessage(option);
+    } else {
+      msg = q.correctMessage;
+    }
+    setResultMessage(msg);
+    setShowResult(true);
+  };
+
+  const nextQuestion = () => {
+    setShowResult(false);
+    setResultMessage("");
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(prev => prev + 1);
+    } else {
+      setCurrentQuestion(0);
+    }
+  };
+
+  return (
+    <div className="mt-8 p-6 bg-pink-50 rounded-2xl border border-pink-100">
+      <h3 className="text-xl font-serif text-pink-600 mb-4">Let's kill the boredom...</h3>
+      
+      {!showResult ? (
+        <div className="space-y-4">
+          <p className="text-gray-700 font-medium text-lg">{questions[currentQuestion].question}</p>
+          <div className="grid gap-3">
+            {questions[currentQuestion].options.map((opt, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleAnswer(opt)}
+                className="w-full py-3 px-4 bg-white border border-pink-200 rounded-xl text-pink-500 hover:bg-pink-100 transition-colors font-medium"
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center space-y-4 py-4">
+          <p className="text-xl font-medium text-pink-600 animate-in fade-in zoom-in duration-300">
+            {resultMessage}
+          </p>
+          <button
+            onClick={nextQuestion}
+            className="px-6 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition-colors"
+          >
+            {currentQuestion < questions.length - 1 ? "Next Question" : "Play Again"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const Modal = ({ isOpen, card, onClose, onOpenCard }: { isOpen: boolean; card: CardData | null; onClose: () => void; onOpenCard: (card: CardData) => void }) => {
   const dragControls = useDragControls();
 
   if (!card) return null;
@@ -290,6 +386,53 @@ const Modal = ({ isOpen, card, onClose }: { isOpen: boolean; card: CardData | nu
                 
                 <div className="text-gray-600 font-light text-lg leading-relaxed whitespace-pre-wrap text-left mx-auto max-w-lg pb-8">
                   {card.content || "Paste your content here..."}
+
+                  {card.image && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="mt-8 rounded-2xl overflow-hidden shadow-xl border-4 border-white rotate-2 hover:rotate-0 transition-transform duration-500 w-full"
+                    >
+                      <img 
+                        src={card.image} 
+                        alt="A special memory" 
+                        className="w-full h-auto object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                    </motion.div>
+                  )}
+                  
+                  {card.id === 12 && (
+                    <div className="mt-8 text-center">
+                      <a 
+                        href="https://wa.me/212619040004?text=Let's%20fix%20this%20%F0%9F%92%94"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors shadow-lg shadow-pink-200"
+                      >
+                        <span>Let's fix this</span>
+                        <Heart size={16} fill="currentColor" />
+                      </a>
+                    </div>
+                  )}
+
+                  {card.id === 9 && (
+                    <div className="mt-8 text-center">
+                      <button 
+                        onClick={() => {
+                          const loveCard = CARDS.find(c => c.id === 146);
+                          if (loveCard) onOpenCard(loveCard);
+                        }}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-pink-400 text-white rounded-full font-medium hover:bg-pink-500 transition-colors shadow-lg shadow-pink-200"
+                      >
+                        <span>If you want love</span>
+                        <Heart size={16} fill="currentColor" />
+                      </button>
+                    </div>
+                  )}
+
+                  {card.id === 15 && <BoredMode />}
                 </div>
 
                 <button 
@@ -318,7 +461,7 @@ const WhatsAppButton = () => {
       transition={{ delay: 2, type: "spring" }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-6 right-6 z-50 glass-card bg-pink-500/80 hover:bg-pink-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 backdrop-blur-md border-pink-400/50 transition-colors"
+      className="fixed bottom-6 right-6 z-50 glass-card bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 backdrop-blur-md border-pink-500/50 transition-colors"
     >
       <span>Miss me? 💌</span>
     </motion.a>
@@ -340,13 +483,125 @@ const SurpriseButton = ({ onClick }: { onClick: () => void }) => (
   </motion.button>
 );
 
+const MemoryModal = ({ isOpen, memory, onClose }: { isOpen: boolean; memory: Memory | null; onClose: () => void }) => {
+  if (!memory) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none"
+          >
+            <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row pointer-events-auto max-h-[80vh]">
+              {/* Image Section */}
+              <div className="w-full md:w-1/2 bg-gray-100 relative min-h-[300px]">
+                {memory.image ? (
+                  <img 
+                    src={memory.image} 
+                    alt="Memory" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-pink-50">
+                    <Heart className="text-pink-200 w-20 h-20 animate-pulse" />
+                  </div>
+                )}
+              </div>
+
+              {/* Content Section */}
+              <div className="w-full md:w-1/2 p-8 flex flex-col justify-center relative">
+                <button 
+                  onClick={onClose}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors"
+                >
+                  <X size={20} />
+                </button>
+
+                <div className="space-y-6">
+                  {memory.date && (
+                    <div className="flex items-center gap-2 text-pink-500 font-medium">
+                      <Calendar size={18} />
+                      <span>{memory.date}</span>
+                    </div>
+                  )}
+                  
+                  <div className="w-12 h-1 bg-pink-200 rounded-full" />
+                  
+                  <p className="text-xl text-gray-700 font-light leading-relaxed whitespace-pre-wrap">
+                    {memory.note}
+                  </p>
+
+                  {memory.isEmpty && (
+                    <p className="text-sm text-pink-400 italic">
+                      Waiting for this moment to happen... ♡
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const MemoryCard = ({ memory, onClick }: { memory: Memory; onClick: (m: Memory) => void }) => {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.02, y: -5 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={() => onClick(memory)}
+      className="aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer relative group glass-card border-white/40 shadow-sm hover:shadow-xl transition-all duration-300"
+    >
+      {memory.image ? (
+        <>
+          <img 
+            src={memory.image} 
+            alt="Memory" 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+            <p className="font-medium text-sm">{memory.date}</p>
+          </div>
+        </>
+      ) : (
+        <div className="w-full h-full flex flex-col items-center justify-center bg-pink-50/50 gap-3 p-4 text-center">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-pink-300 group-hover:text-pink-500 group-hover:scale-110 transition-all duration-300">
+            <Plus size={24} />
+          </div>
+          <p className="text-xs text-pink-400/70 font-medium uppercase tracking-wider">Add Memory</p>
+        </div>
+      )}
+      
+      {/* Interactive Heart Burst on Click */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-0 active:opacity-100 transition-opacity duration-200">
+        <Heart className="text-white w-12 h-12 animate-ping" fill="currentColor" />
+      </div>
+    </motion.div>
+  );
+};
+
 // --- Main App ---
 
 export default function App() {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [modalState, setModalState] = useState<ModalState>({ isOpen: false, card: null });
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [memoryModalState, setMemoryModalState] = useState<MemoryModalState>({ isOpen: false, memory: null });
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
@@ -360,16 +615,7 @@ export default function App() {
     );
   }, [searchQuery]);
 
-  const toggleMusic = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play().catch(e => console.log("Audio play failed", e));
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+
 
   const handleCardClick = (card: CardData) => {
     setModalState({ isOpen: true, card });
@@ -389,18 +635,16 @@ export default function App() {
         isOpen={modalState.isOpen} 
         card={modalState.card} 
         onClose={() => setModalState(prev => ({ ...prev, isOpen: false }))} 
+        onOpenCard={(card) => setModalState({ isOpen: true, card })}
       />
       
-      {/* Audio Element */}
-      <audio ref={audioRef} loop src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_fc06c23860.mp3?filename=piano-moment-11342.mp3" />
+      <MemoryModal
+        isOpen={memoryModalState.isOpen}
+        memory={memoryModalState.memory}
+        onClose={() => setMemoryModalState({ isOpen: false, memory: null })}
+      />
+      
 
-      {/* Music Toggle */}
-      <button 
-        onClick={toggleMusic}
-        className="fixed top-6 right-6 z-50 p-3 rounded-full glass-card text-pink-500 hover:text-pink-600 transition-colors"
-      >
-        {isPlaying ? <Volume2 size={20} /> : <VolumeX size={20} />}
-      </button>
 
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col items-center justify-center px-4 relative">
@@ -513,10 +757,37 @@ export default function App() {
           )}
         </section>
 
+        {/* Memory Gallery Section */}
+        <section className="space-y-8 py-12">
+          <div className="text-center space-y-2">
+            <h2 className="text-3xl font-serif text-pink-600">Walae & Makram Memory Gallery 💖</h2>
+            <p className="text-pink-400/80">Our story, one picture at a time</p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-2">
+            {MEMORIES.map((memory) => (
+              <MemoryCard 
+                key={memory.id} 
+                memory={memory} 
+                onClick={(m) => setMemoryModalState({ isOpen: true, memory: m })} 
+              />
+            ))}
+          </div>
+        </section>
+
         {/* Footer */}
-        <footer className="text-center py-12 text-pink-300 text-sm">
-          <p>Made with ❤️ for Walae</p>
-          <p className="mt-2 text-xs opacity-60">Forever & Always</p>
+        <footer className="text-center py-16 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-pink-100/50 to-transparent pointer-events-none" />
+          <div className="relative z-10 space-y-4">
+            <div className="flex justify-center gap-2 mb-4">
+              <Heart className="text-pink-400 animate-bounce" size={20} fill="currentColor" />
+              <Heart className="text-pink-300 animate-bounce delay-100" size={20} fill="currentColor" />
+              <Heart className="text-pink-200 animate-bounce delay-200" size={20} fill="currentColor" />
+            </div>
+            <p className="text-pink-600 font-medium text-lg">Made with all my love for Walae 🎀</p>
+            <p className="text-pink-400 text-sm">You are my favorite notification.</p>
+            <p className="text-xs text-pink-300 uppercase tracking-widest mt-4">Forever & Always, Makram ♡</p>
+          </div>
         </footer>
       </div>
 

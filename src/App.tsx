@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useDragControls } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { Heart, Volume2, VolumeX, X, Shuffle, Sparkles, Search } from 'lucide-react';
 import { CARDS, CardData, Category } from './constants';
@@ -234,6 +234,8 @@ const SearchBar = ({ searchQuery, onSearch }: { searchQuery: string; onSearch: (
 };
 
 const Modal = ({ isOpen, card, onClose }: { isOpen: boolean; card: CardData | null; onClose: () => void }) => {
+  const dragControls = useDragControls();
+
   if (!card) return null;
 
   return (
@@ -256,37 +258,47 @@ const Modal = ({ isOpen, card, onClose }: { isOpen: boolean; card: CardData | nu
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             drag="y"
+            dragControls={dragControls}
+            dragListener={false}
             dragConstraints={{ top: 0 }}
             dragElastic={0.2}
             onDragEnd={(_, info) => {
               if (info.offset.y > 100) onClose();
             }}
-            className="fixed bottom-0 left-0 right-0 z-[70] bg-white/90 backdrop-blur-xl rounded-t-[30px] p-8 pb-12 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] border-t border-white/50 max-w-2xl mx-auto max-h-[85vh] overflow-y-auto"
+            className="fixed bottom-0 left-0 right-0 z-[70] bg-white/90 backdrop-blur-xl rounded-t-[30px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] border-t border-white/50 max-w-2xl mx-auto max-h-[85vh] flex flex-col"
           >
-            {/* Drag Handle */}
-            <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-8" />
+            {/* Drag Handle Area */}
+            <div 
+              className="w-full py-6 flex justify-center touch-none cursor-grab active:cursor-grabbing shrink-0"
+              onPointerDown={(e) => dragControls.start(e)}
+            >
+              <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+            </div>
             
-            <div className="text-center space-y-6">
-              <span className="inline-block px-3 py-1 bg-pink-100 text-pink-500 text-xs rounded-full uppercase tracking-widest font-medium">
-                {card.category}
-              </span>
-              
-              <h2 className="text-2xl sm:text-3xl font-serif text-gray-800 leading-tight">
-                {card.title}
-              </h2>
-              
-              <div className="w-16 h-[1px] bg-pink-200 mx-auto" />
-              
-              <div className="text-gray-600 font-light text-lg leading-relaxed whitespace-pre-wrap text-left mx-auto max-w-lg">
-                {card.content || "Paste your content here..."}
-              </div>
+            {/* Scrollable Content */}
+            <div className="overflow-y-auto px-8 pb-12 flex-1 overscroll-contain">
+              <div className="text-center space-y-6">
+                <span className="inline-block px-3 py-1 bg-pink-100 text-pink-500 text-xs rounded-full uppercase tracking-widest font-medium">
+                  {card.category}
+                </span>
+                
+                <h2 className="text-2xl sm:text-3xl font-serif text-gray-800 leading-tight">
+                  {card.title}
+                </h2>
+                
+                <div className="w-16 h-[1px] bg-pink-200 mx-auto" />
+                
+                <div className="text-gray-600 font-light text-lg leading-relaxed whitespace-pre-wrap text-left mx-auto max-w-lg pb-8">
+                  {card.content || "Paste your content here..."}
+                </div>
 
-              <button 
-                onClick={onClose}
-                className="mt-8 w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto text-gray-400 hover:bg-gray-200 transition-colors"
-              >
-                <X size={20} />
-              </button>
+                <button 
+                  onClick={onClose}
+                  className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto text-gray-400 hover:bg-gray-200 transition-colors shrink-0"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
           </motion.div>
         </>

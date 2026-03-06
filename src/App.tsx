@@ -596,6 +596,75 @@ const MemoryCard = ({ memory, onClick }: { memory: Memory; onClick: (m: Memory) 
   );
 };
 
+const ApologyHero = () => {
+  return (
+    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden bg-[#fff5f7]">
+      {/* Ethereal Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8),transparent)]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-pink-200/30 rounded-full blur-[100px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-rose-200/20 rounded-full blur-[100px] animate-pulse delay-1000" />
+      </div>
+
+      <div className="max-w-3xl mx-auto z-10 w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-6xl sm:text-8xl font-cursive text-pink-500/90 mb-4 drop-shadow-sm">for walae</h1>
+          <div className="flex items-center justify-center gap-3 opacity-80">
+            <div className="h-[1px] w-12 bg-pink-300" />
+            <p className="text-pink-400 text-xs sm:text-sm tracking-[0.2em] uppercase font-medium">
+              this page only exists because of you
+            </p>
+            <div className="h-[1px] w-12 bg-pink-300" />
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
+          className="bg-white/60 backdrop-blur-md rounded-[40px] p-8 sm:p-12 shadow-[0_20px_60px_-15px_rgba(255,192,203,0.3)] border border-white/80 relative overflow-hidden"
+        >
+           {/* Decorative corner elements */}
+           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-pink-200 to-transparent opacity-50" />
+           
+           <div className="space-y-8 text-center relative z-10">
+             <p className="text-gray-700 font-serif text-lg sm:text-xl leading-loose tracking-wide">
+               i made this space for you because i needed a place where you could see my heart without anger or pride just honesty i know i hurt you and that is something i regret deeply because you never deserved to feel disrespected by me you deserve patience kindness and someone who protects your heart not someone who lets anger take control what happened keeps replaying in my mind and if i could go back and change it i would do it instantly because losing you over my mistake would honestly break me you are someone rare someone who understands me in a way very few people ever have we share the same energy the same passion for basketball the same mindset and that connection means more to me than my pride or my ego i dont want to be the reason you feel pain i want to be the reason you feel safe supported and loved every single day i am truly sorry and i promise to grow to control my anger to speak with respect and to treat you the way you always deserved from the beginning i miss your presence your smile and the peace i feel when you are next to me and i hope one day you can see that my mistake does not define how much you truly mean to me
+             </p>
+
+             <div className="pt-6">
+               <Heart className="w-6 h-6 text-pink-300 mx-auto mb-4 animate-pulse" fill="currentColor" />
+               <p className="text-pink-500 font-cursive text-2xl sm:text-3xl">
+                 if your heart ever feels ready to talk again i will always be here
+               </p>
+               <p className="text-pink-300/70 text-[10px] uppercase tracking-widest mt-4">
+                 no pressure no expectations just honesty from my heart
+               </p>
+             </div>
+           </div>
+        </motion.div>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 4, duration: 1 }}
+        className="absolute bottom-8 text-pink-300/60"
+      >
+        <div className="flex flex-col items-center gap-2 animate-bounce duration-[3s]">
+          <span className="text-[10px] uppercase tracking-widest">scroll down</span>
+          <Heart size={14} />
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
 // --- Main App ---
 
 export default function App() {
@@ -646,77 +715,12 @@ export default function App() {
       
 
 
-      {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-4 relative">
-        <motion.div 
-          style={{ opacity, scale }}
-          className="text-center z-10"
-        >
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="text-7xl sm:text-9xl font-cursive text-pink-500 mb-4 drop-shadow-sm"
-          >
-            Walae ♡
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1 }}
-            className="text-pink-400/80 text-lg sm:text-xl font-light tracking-widest uppercase"
-          >
-            My Favorite Person
-          </motion.p>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute bottom-10 text-pink-300"
-        >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs uppercase tracking-widest">Scroll for love</span>
-            <Heart size={16} fill="currentColor" />
-          </div>
-        </motion.div>
-      </section>
+      <ApologyHero />
 
       {/* Content Container */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-16 relative z-10">
         
-        {/* Intro Letter */}
-        <motion.section 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="glass-card p-8 sm:p-12 rounded-3xl text-center space-y-6"
-        >
-          <h2 className="text-3xl font-serif text-pink-600 italic">Walae...</h2>
-          <div className="space-y-4 text-gray-600 leading-relaxed font-light text-lg">
-            <p>I didn’t make this because of a special day.</p>
-            <p>I didn’t wait for Valentine’s.</p>
-            <p>I didn’t wait for an anniversary.</p>
-            <p className="font-medium text-pink-500">I made this just because you exist.</p>
-            <p>
-              Since March 1st, 2026, something in my life shifted.
-              It’s only been a few days, but somehow it feels different.
-              Softer. Warmer. Realer.
-            </p>
-            <p>
-              This little space on the internet? <br/>
-              It’s yours.
-            </p>
-            <p className="italic text-pink-400 text-base">
-              Every tap, every card, every word I’ll write here…
-              is just another way of saying
-              you matter to me more than you think.
-            </p>
-          </div>
-        </motion.section>
+
 
         {/* Relationship Counter */}
         <motion.section 

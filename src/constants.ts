@@ -43,6 +43,37 @@ export const MEMORIES: Memory[] = [
   { id: 12, isEmpty: true, note: "Our next memory goes here ♡" },
 ];
 
+export interface HerPhoto {
+  id: number;
+  url: string;
+  note: string;
+  isFavorite?: boolean;
+}
+
+export const HER_PHOTOS: HerPhoto[] = [
+  { id: 1, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.00-3.jpeg", note: "Just looking at you makes my day better. 🌸" },
+  { id: 2, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.00-2.jpeg", note: "Your smile is literally the prettiest thing I've ever seen. ✨" },
+  { id: 3, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.00-1.jpeg", note: "Effortlessly beautiful. How do you do it? 💖" },
+  { id: 4, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.00.jpeg", note: "A masterpiece. Truly. 🎨" },
+  { id: 5, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.01.jpeg", note: "You have this glow that lights up everything. 🌟" },
+  { id: 6, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.02-1.jpeg", note: "My heart skips a beat every time I see this face. 💓" },
+  { id: 7, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.02.jpeg", note: "Simply stunning. No other words. 😍" },
+  { id: 8, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.03-1.jpeg", note: "You are art. Pure and simple. 🖼️" },
+  { id: 9, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.03.jpeg", note: "I could stare at you forever and never get bored. 👀♡" },
+  { id: 10, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.04-3.jpeg", note: "The kind of beauty that makes people stop and stare. 🌹" },
+  { id: 11, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.04-2.jpeg", note: "You're glowing here. Absolutely radiant. ✨" },
+  { id: 12, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.04-1.jpeg", note: "My favorite view in the entire world. 🌍" },
+  { id: 13, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.04.jpeg", note: "Perfection exists, and it's you. 💯" },
+  { id: 14, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.16.41.jpeg", note: "So precious. I want to protect this smile forever. 🛡️♡" },
+  { id: 15, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.16.46.jpeg", note: "This one... this is my absolute favorite. You look like an angel here. 👼💖", isFavorite: true },
+  { id: 16, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.16.49.jpeg", note: "Captivating. That's what you are. 💫" },
+  { id: 17, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.16.50-1.jpeg", note: "Every angle is your best angle. 📸" },
+  { id: 18, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.16.50.jpeg", note: "Natural beauty at its finest. 🌿" },
+  { id: 19, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.16.54.jpeg", note: "You have the kindest eyes. 👁️♡" },
+  { id: 20, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.00-5.jpeg", note: "Just wow. I'm so lucky. 🍀" },
+  { id: 21, url: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-04-at-00.17.00-4.jpeg", note: "The definition of gorgeous. 📖✨" },
+];
+
 export const CARDS: CardData[] = [
   // --- EXISTING CARDS (0-99) ---
   

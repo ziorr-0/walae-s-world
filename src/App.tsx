@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useDragControls } from 'motion/react';
 import confetti from 'canvas-confetti';
-import { Heart, X, Shuffle, Sparkles, Search, Calendar, Plus } from 'lucide-react';
-import { CARDS, CardData, Category, MEMORIES, Memory } from './constants';
+import { Heart, X, Shuffle, Sparkles, Search, Calendar, Plus, Camera } from 'lucide-react';
+import { CARDS, CardData, Category, MEMORIES, Memory, HER_PHOTOS, HerPhoto } from './constants';
 
 // --- Types ---
 type ModalState = {
@@ -13,6 +13,11 @@ type ModalState = {
 type MemoryModalState = {
   isOpen: boolean;
   memory: Memory | null;
+};
+
+type HerPhotoModalState = {
+  isOpen: boolean;
+  photo: HerPhoto | null;
 };
 
 // --- Components ---
@@ -665,12 +670,117 @@ const ApologyHero = () => {
   );
 };
 
+const HerPhotoModal = ({ isOpen, photo, onClose }: { isOpen: boolean; photo: HerPhoto | null; onClose: () => void }) => {
+  if (!photo) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[80] bg-pink-900/80 backdrop-blur-md"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none"
+          >
+            <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden pointer-events-auto relative">
+              <button 
+                onClick={onClose}
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors backdrop-blur-sm"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="relative aspect-[3/4] w-full bg-gray-100">
+                <img 
+                  src={photo.url} 
+                  alt="Her" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+                {photo.isFavorite && (
+                  <div className="absolute top-4 left-4 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                    <Heart size={12} fill="currentColor" />
+                    <span>FAVORITE</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="p-6 text-center bg-white space-y-4">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-pink-100 text-pink-500 mb-2">
+                  <Heart size={20} fill="currentColor" />
+                </div>
+                <p className="text-xl font-cursive text-pink-600 leading-relaxed">
+                  "{photo.note}"
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const HerGallery = ({ onPhotoClick }: { onPhotoClick: (photo: HerPhoto) => void }) => {
+  return (
+    <section className="space-y-8 py-12 bg-pink-50/50 rounded-[40px] px-6 my-12">
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center justify-center gap-2 bg-pink-100 px-4 py-1.5 rounded-full text-pink-500 text-sm font-medium mb-2">
+          <Camera size={16} />
+          <span>Her Gallery</span>
+        </div>
+        <h2 className="text-3xl sm:text-4xl font-cursive text-pink-600">The Muse</h2>
+        <p className="text-pink-400/80 max-w-md mx-auto">
+          Every picture of you is a work of art. Here are just a few reasons why I smile.
+        </p>
+      </div>
+
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+        {HER_PHOTOS.map((photo) => (
+          <motion.div
+            key={photo.id}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => onPhotoClick(photo)}
+            className="break-inside-avoid rounded-2xl overflow-hidden cursor-pointer relative group shadow-md hover:shadow-xl transition-all duration-300"
+          >
+            <img 
+              src={photo.url} 
+              alt="Her" 
+              className="w-full h-auto object-cover"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <Heart className="text-white w-8 h-8 drop-shadow-md transform scale-0 group-hover:scale-100 transition-transform duration-300 delay-100" fill="currentColor" />
+            </div>
+            {photo.isFavorite && (
+              <div className="absolute top-2 right-2">
+                <Heart className="text-pink-500 drop-shadow-md w-5 h-5" fill="currentColor" />
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
 // --- Main App ---
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [modalState, setModalState] = useState<ModalState>({ isOpen: false, card: null });
   const [memoryModalState, setMemoryModalState] = useState<MemoryModalState>({ isOpen: false, memory: null });
+  const [herPhotoModalState, setHerPhotoModalState] = useState<HerPhotoModalState>({ isOpen: false, photo: null });
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
@@ -711,6 +821,12 @@ export default function App() {
         isOpen={memoryModalState.isOpen}
         memory={memoryModalState.memory}
         onClose={() => setMemoryModalState({ isOpen: false, memory: null })}
+      />
+
+      <HerPhotoModal
+        isOpen={herPhotoModalState.isOpen}
+        photo={herPhotoModalState.photo}
+        onClose={() => setHerPhotoModalState({ isOpen: false, photo: null })}
       />
       
 
@@ -778,6 +894,9 @@ export default function App() {
             ))}
           </div>
         </section>
+
+        {/* Her Gallery Section */}
+        <HerGallery onPhotoClick={(photo) => setHerPhotoModalState({ isOpen: true, photo })} />
 
         {/* Footer */}
         <footer className="text-center py-16 relative overflow-hidden">

@@ -601,7 +601,7 @@ const MemoryCard = ({ memory, onClick }: { memory: Memory; onClick: (m: Memory) 
   );
 };
 
-const ApologyHero = () => {
+const CuteHero = () => {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden bg-[#fff5f7]">
       {/* Ethereal Background */}
@@ -622,7 +622,7 @@ const ApologyHero = () => {
           <div className="flex items-center justify-center gap-3 opacity-80">
             <div className="h-[1px] w-12 bg-pink-300" />
             <p className="text-pink-400 text-xs sm:text-sm tracking-[0.2em] uppercase font-medium">
-              this page only exists because of you
+              my favorite person in the world
             </p>
             <div className="h-[1px] w-12 bg-pink-300" />
           </div>
@@ -639,16 +639,16 @@ const ApologyHero = () => {
            
            <div className="space-y-8 text-center relative z-10">
              <p className="text-gray-700 font-serif text-lg sm:text-xl leading-loose tracking-wide">
-               i made this space for you because i needed a place where you could see my heart without anger or pride just honesty i know i hurt you and that is something i regret deeply because you never deserved to feel disrespected by me you deserve patience kindness and someone who protects your heart not someone who lets anger take control what happened keeps replaying in my mind and if i could go back and change it i would do it instantly because losing you over my mistake would honestly break me you are someone rare someone who understands me in a way very few people ever have we share the same energy the same passion for basketball the same mindset and that connection means more to me than my pride or my ego i dont want to be the reason you feel pain i want to be the reason you feel safe supported and loved every single day i am truly sorry and i promise to grow to control my anger to speak with respect and to treat you the way you always deserved from the beginning i miss your presence your smile and the peace i feel when you are next to me and i hope one day you can see that my mistake does not define how much you truly mean to me
+               i made this space for you because you are my favorite person in the whole world. every time i look at you, i realize how lucky i am. you bring so much light, warmth, and happiness into my life. this is a little corner of the internet just for us, filled with memories, thoughts, and all the reasons why i adore you. i want you to always have a place to go when you need a reminder of how special you are to me. you are my peace, my joy, and my everything.
              </p>
 
              <div className="pt-6">
                <Heart className="w-6 h-6 text-pink-300 mx-auto mb-4 animate-pulse" fill="currentColor" />
                <p className="text-pink-500 font-cursive text-2xl sm:text-3xl">
-                 if your heart ever feels ready to talk again i will always be here
+                 i love you more than words could ever say
                </p>
                <p className="text-pink-300/70 text-[10px] uppercase tracking-widest mt-4">
-                 no pressure no expectations just honesty from my heart
+                 forever and always
                </p>
              </div>
            </div>
@@ -831,7 +831,7 @@ export default function App() {
       
 
 
-      <ApologyHero />
+      <CuteHero />
 
       {/* Content Container */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-16 relative z-10">

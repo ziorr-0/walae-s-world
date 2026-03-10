@@ -31,7 +31,13 @@ export const MEMORIES: Memory[] = [
     note: "Unforgettable moments.\nJust you and me. ✨",
     isEmpty: false
   },
-  { id: 3, isEmpty: true, note: "Our next memory goes here ♡" },
+  {
+    id: 3,
+    image: "https://majorelle-centreaffaires.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-07-at-18.55.31.jpeg",
+    date: "March 7, 2026",
+    note: "Another beautiful moment with you. 💖",
+    isEmpty: false
+  },
   { id: 4, isEmpty: true, note: "Our next memory goes here ♡" },
   { id: 5, isEmpty: true, note: "Our next memory goes here ♡" },
   { id: 6, isEmpty: true, note: "Our next memory goes here ♡" },
